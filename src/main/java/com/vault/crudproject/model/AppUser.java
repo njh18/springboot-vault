@@ -1,9 +1,7 @@
 package com.vault.crudproject.model;
 
 import com.vault.crudproject.constants.AppUserRole;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +14,8 @@ import java.util.Collections;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
+@Builder
+@AllArgsConstructor
 public class AppUser implements UserDetails {
 
     @Id
@@ -29,14 +29,16 @@ public class AppUser implements UserDetails {
             generator = "student_sequence"
     )
     private Long id;
-    private String name;
-    private String username;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
-    private Boolean locked;
-    private Boolean enabled;
+    @Builder.Default
+    private Boolean locked = false;
+    @Builder.Default
+    private Boolean enabled = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,7 +53,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
